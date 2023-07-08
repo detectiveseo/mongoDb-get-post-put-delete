@@ -4,6 +4,7 @@ import addToDb from './functions/addToDb'
 import axios from 'axios'
 import EditItem from './Components/EditItem'
 import { deleteItems } from './functions/deleteItems'
+import { useTotalItems } from './functions/useTotalItems'
 
 function App() {
 
@@ -17,11 +18,16 @@ function App() {
   }, [addToDb])
 
 
+  const editItems = (x) => {
+    setEditFormData(x);
+    setEditForm(false);
+  }
 
-const editItems = (x) => {
-      setEditFormData(x);
-      setEditForm(false);
-    }
+const totalItems = useTotalItems();
+
+const itemsPerPage = 6; //TODO 
+const totalPages = Math.ceil(totalItems.totalItems / itemsPerPage);
+console.log(totalPages)
 
   return (
     <>
@@ -82,6 +88,8 @@ const editItems = (x) => {
           <EditItem editFormData={editFormData} setEditForm={setEditForm} />
         </div>
       </div>
+
+
     </>
   )
 }

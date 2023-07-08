@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import addToDb from './functions/addToDb'
 import axios from 'axios'
@@ -10,12 +10,16 @@ function App() {
 
   const [editForm, setEditForm] = useState(true);
   const [editFormData, setEditFormData] = useState({})
-  let [allData, setAllData] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [cureentPage, setCureentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6)
 
 
   useEffect(() => {
-    axios.get("http://localhost:3000/users").then(data => setAllData(data.data))
-  }, [])
+    axios.get("http://localhost:3000/users").then(data => {
+      setAllData(data.data);
+    });
+  }, []);
 
 
   const editItems = (x) => {
@@ -25,10 +29,16 @@ function App() {
 
   const totalItems = useTotalItems();
 
-  const itemsPerPage = 6; //TODO 
-  const totalPages = Math.ceil(totalItems.totalItems / itemsPerPage);
-  const loopPages = [...Array(totalPages).keys()]
-  console.log(loopPages);
+  const optionForPerpage = useRef();
+  const handlePerPage =() => {
+    setItemsPerPage(optionForPerpage.current.value);
+  }
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const loopPages = [];
+  for(let i = 0; i < totalPages; i++){
+    loopPages.push(i+1)
+  }
 
   return (
     <>
@@ -67,7 +77,7 @@ function App() {
         <div>
           <div className='grid grid-cols-2 gap-5 justify-start items-center'>
             {
-              allData.map((x, i) => {
+              allData?.map((x, i) => {
                 return (
                   <div key={i} className='border flex-col h-56 flex justify-center items-center relative'>
                     <h2 className='text-3xl text-white'>{x?.name}</h2>
@@ -84,12 +94,25 @@ function App() {
               })
             }
           </div>
-              
-      <div className="join mt-6">
-        {
-          loopPages.map((number) => <button key={number} className=" join-item btn btn-lg bg-green-500 text-black hover:text-white">{number + 1}</button>)
-        }
+          
+          <div className="join mt-6">
+            {
+              loopPages?.map((number) => <button 
+              key={number} 
+              onClick={() => setCureentPage(number)}
+              className=" join-item btn btn-lg bg-green-500 text-black hover:text-white">{number}</button>)
+            }
           </div>
+            <div>
+              <span>Item's per page  </span>
+              <select className='p-1' ref={optionForPerpage} onChange={handlePerPage}>
+                <option value="2">2</option>
+                <option value="4">4</option>
+                <option value="6" selected>6</option>
+              </select>
+            <span>current page is {cureentPage} of total items {totalItems}</span>
+            </div>
+
         </div>
 
       </div>

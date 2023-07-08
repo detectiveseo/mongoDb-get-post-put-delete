@@ -6,7 +6,7 @@ export const useTotalItems = () => {
 
     useEffect(() => {
         axios.get("http://localhost:3000/total-items")
-        .then(res => setItems(res.data));
+        .then(res => setItems(res.data.totalItems));
     }, [])
 
     return items;

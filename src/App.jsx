@@ -1,59 +1,28 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import addToDb from './functions/addToDb'
 import axios from 'axios'
 import EditItem from './Components/EditItem'
-import Swal from 'sweetalert2'
+import { deleteItems } from './functions/deleteItems'
 
 function App() {
 
   const [editForm, setEditForm] = useState(true);
   const [editFormData, setEditFormData] = useState({})
-
-
   let [allData, setAllData] = useState([]);
+
+
   useEffect(() => {
     axios.get("http://localhost:3000/users").then(data => setAllData(data.data))
   }, [addToDb])
 
 
-  const deleteItems = (x) => {
-    const id = x._id;
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
 
-      if (result.isConfirmed) {
+const editItems = (x) => {
+      setEditFormData(x);
+      setEditForm(false);
+    }
 
-        axios.delete(`http://localhost:3000/remove/${id}`)
-          .then((res) => {
-            if(res?.data?.ok == true){
-              Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-              )
-            }})
-      }
-    })
-  }
-
-
-  const editItems = (x) => {
-    setEditFormData(x);
-    const id = x._id;
-    // <TODO></TODO>
-    setEditForm(false);
-    return x;
-  }
   return (
     <>
       <div className='grid grid-cols-2 gap-4 relative'>

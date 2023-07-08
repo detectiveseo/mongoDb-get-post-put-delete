@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     axios.get("http://localhost:3000/users").then(data => setAllData(data.data))
-  }, [addToDb])
+  }, [])
 
 
   const editItems = (x) => {
@@ -23,11 +23,12 @@ function App() {
     setEditForm(false);
   }
 
-const totalItems = useTotalItems();
+  const totalItems = useTotalItems();
 
-const itemsPerPage = 6; //TODO 
-const totalPages = Math.ceil(totalItems.totalItems / itemsPerPage);
-console.log(totalPages)
+  const itemsPerPage = 6; //TODO 
+  const totalPages = Math.ceil(totalItems.totalItems / itemsPerPage);
+  const loopPages = [...Array(totalPages).keys()]
+  console.log(loopPages);
 
   return (
     <>
@@ -62,25 +63,35 @@ console.log(totalPages)
           </form>
         </div>
 
-        <div className='grid grid-cols-2 gap-5 justify-start items-center'>
-          {
-            allData.map((x, i) => {
-              return (
-                <div key={i} className='border flex-col h-56 flex justify-center items-center relative'>
-                  <h2 className='text-3xl text-white'>{x?.name}</h2>
-                  <h2 className='text-1xl text-white'>{x?.email}</h2>
 
-                  <div
-                    onClick={() => deleteItems(x)}
-                    className='btn btn-outline bg-red-700 p-3 absolute -top-5 -right-5 rounded-full text-white px-5'>X</div>
-                  <div
-                    onClick={() => editItems(x)}
-                    className='bg-red-600 absolute bottom-0 left-0 p-3 text-white px-5'>Edit</div>
-                </div>
-              )
-            })
-          }
+        <div>
+          <div className='grid grid-cols-2 gap-5 justify-start items-center'>
+            {
+              allData.map((x, i) => {
+                return (
+                  <div key={i} className='border flex-col h-56 flex justify-center items-center relative'>
+                    <h2 className='text-3xl text-white'>{x?.name}</h2>
+                    <h2 className='text-1xl text-white'>{x?.email}</h2>
+
+                    <div
+                      onClick={() => deleteItems(x)}
+                      className='btn btn-outline bg-red-700 p-3 absolute -top-5 -right-5 rounded-full text-white px-5'>X</div>
+                    <div
+                      onClick={() => editItems(x)}
+                      className='bg-red-600 absolute bottom-0 left-0 p-3 text-white px-5'>Edit</div>
+                  </div>
+                )
+              })
+            }
+          </div>
+              
+      <div className="join mt-6">
+        {
+          loopPages.map((number) => <button key={number} className=" join-item btn btn-lg bg-green-500 text-black hover:text-white">{number + 1}</button>)
+        }
+          </div>
         </div>
+
       </div>
 
       <div className={` fixed w-full left-0 h-[100vh] top-0 bg-gray-700 ${editForm ? "hidden" : "block"} `}>

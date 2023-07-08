@@ -5,6 +5,7 @@ import './App.css'
 import addToDb from './functions/addToDb'
 import axios from 'axios'
 import EditItem from './Components/EditItem'
+import Swal from 'sweetalert2'
 
 function App() {
 
@@ -20,8 +21,29 @@ function App() {
 
   const deleteItems = (x) => {
     const id = x._id;
-    axios.delete(`http://localhost:3000/remove/${id}`)
-      .then(() => { })
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+
+        axios.delete(`http://localhost:3000/remove/${id}`)
+          .then((res) => {
+            if(res?.data?.ok == true){
+              Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              )
+            }})
+      }
+    })
   }
 
 
@@ -45,21 +67,21 @@ function App() {
               type="text"
               placeholder="Type here"
               name='name'
-              value="Imran"
+              defaultValue="Imran"
               className="input input-bordered input-success w-full" />
 
             <input
               type="text"
               placeholder="Type here"
               name='email'
-              value="imboy8585@gmail.com"
+              defaultValue="imboy8585@gmail.com"
               className="input input-bordered input-success w-full" />
 
             <input
               type="text"
               placeholder="Type here"
               name='proffesion'
-              value="freeluncer"
+              defaultValue="freeluncer"
               className="input input-bordered input-success w-full" />
             <input type="submit" value="submit" className='btn btn-outline w-full bg-green-300 text-black shadow-green-400 shadow-inner' />
           </form>
@@ -88,7 +110,7 @@ function App() {
 
       <div className={` fixed w-full left-0 h-[100vh] top-0 bg-gray-700 ${editForm ? "hidden" : "block"} `}>
         <div className='w-4/12 mx-auto flex flex-col justify-center h-[100vh]'>
-          <EditItem editFormData={editFormData} setEditForm={setEditForm}/>
+          <EditItem editFormData={editFormData} setEditForm={setEditForm} />
         </div>
       </div>
     </>

@@ -12,21 +12,21 @@ const EditItem = ({editFormData ,setEditForm}) => {
                     type="text"
                     placeholder="Type here"
                     name='name'
-                    value={name}
+                    defaultValue={name}
                     className="input input-bordered input-success w-full" />
 
                 <input
                     type="text"
                     placeholder="Type here"
                     name='email'
-                    value={email}
+                    defaultValue={email}
                     className="input input-bordered input-success w-full" />
 
                 <input
                     type="text"
                     placeholder="Type here"
                     name='proffesion'
-                    value={proffesion}
+                    defaultValue={proffesion}
                     className="input input-bordered input-success w-full" />
                 <input type="submit" value="submit" className='btn btn-outline w-full bg-green-300 text-black shadow-green-400 shadow-inner' />
             </form>

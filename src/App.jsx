@@ -5,39 +5,42 @@ import axios from 'axios'
 import EditItem from './Components/EditItem'
 import { deleteItems } from './functions/deleteItems'
 import { useTotalItems } from './functions/useTotalItems'
+import useUserdata from './functions/useUsersdata'
 
 function App() {
 
   const [editForm, setEditForm] = useState(true);
   const [editFormData, setEditFormData] = useState({})
-  const [allData, setAllData] = useState([]);
-  const [cureentPage, setCureentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6)
 
 
-  useEffect(() => {
-    axios.get("http://localhost:3000/users").then(data => {
-      setAllData(data.data);
-    });
-  }, []);
+
+  const userData = useUserdata();
+  const {
+    allData,
+    currentPage,
+    setcurrentPage,
+    itemsPerPage,
+    setItemsPerPage
+  } = userData;
+
 
 
   const editItems = (x) => {
     setEditFormData(x);
     setEditForm(false);
   }
-
   const totalItems = useTotalItems();
 
+
   const optionForPerpage = useRef();
-  const handlePerPage =() => {
+  const handlePerPage = () => {
     setItemsPerPage(optionForPerpage.current.value);
   }
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const loopPages = [];
-  for(let i = 0; i < totalPages; i++){
-    loopPages.push(i+1)
+  for (let i = 0; i < totalPages; i++) {
+    loopPages.push(i + 1)
   }
 
   return (
@@ -84,7 +87,7 @@ function App() {
                     <h2 className='text-1xl text-white'>{x?.email}</h2>
 
                     <div
-                      onClick={() => deleteItems(x)}
+                      onClick={() => deleteItems(x, userData)}
                       className='btn btn-outline bg-red-700 p-3 absolute -top-5 -right-5 rounded-full text-white px-5'>X</div>
                     <div
                       onClick={() => editItems(x)}
@@ -94,24 +97,29 @@ function App() {
               })
             }
           </div>
-          
+
           <div className="join mt-6">
             {
-              loopPages?.map((number) => <button 
-              key={number} 
-              onClick={() => setCureentPage(number)}
-              className=" join-item btn btn-lg bg-green-500 text-black hover:text-white">{number}</button>)
+              loopPages?.map((number) => <button
+                key={number}
+
+                onClick={() => setcurrentPage(number)}
+                className={`join-item btn btn-lg bg-green-500 text-black hover:text-white ${currentPage === number ? "btn-active" : ""}`}>{number}</button>)
             }
           </div>
-            <div>
-              <span>Item's per page  </span>
-              <select className='p-1' ref={optionForPerpage} onChange={handlePerPage}>
-                <option value="2">2</option>
-                <option value="4">4</option>
-                <option value="6" selected>6</option>
-              </select>
-            <span>current page is {cureentPage} of total items {totalItems}</span>
-            </div>
+
+          <div>
+            <span>Item's per page  </span>
+            <select className='p-1' ref={optionForPerpage} onChange={handlePerPage}>
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="6" defaultValue>6</option>
+            </select>
+
+            <span>
+              Current page is {currentPage ? currentPage : ""}
+            </span>
+          </div>
 
         </div>
 

@@ -1,7 +1,8 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export const deleteItems = (x) => {
+export const deleteItems = (x, userData) => {
+  console.log(userData);
     const id = x._id;
     Swal.fire({
       title: 'Are you sure?',
@@ -19,6 +20,7 @@ export const deleteItems = (x) => {
           .then((res) => {
 
             if(res?.data?.ok == true){
+              fetch()
               Swal.fire(
                 'Deleted!',
                 'Your file has been deleted.',

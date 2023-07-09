@@ -2,7 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 export const deleteItems = (x, userData) => {
-  console.log(userData);
+  const {fetch} = userData;
     const id = x._id;
     Swal.fire({
       title: 'Are you sure?',

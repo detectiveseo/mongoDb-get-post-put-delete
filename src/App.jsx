@@ -72,6 +72,11 @@ function App() {
               name='proffesion'
               defaultValue="freeluncer"
               className="input input-bordered input-success w-full" />
+
+            <input 
+            type="file" 
+            name='image'
+            className="file-input file-input-bordered file-input-success w-full max-w-xs" />
             <input type="submit" value="submit" className='btn btn-outline w-full bg-green-300 text-black shadow-green-400 shadow-inner' />
           </form>
         </div>
@@ -83,6 +88,7 @@ function App() {
               allData?.map((x, i) => {
                 return (
                   <div key={i} className='border flex-col h-56 flex justify-center items-center relative'>
+                    <img src={x?.image} />
                     <h2 className='text-3xl text-white'>{x?.name}</h2>
                     <h2 className='text-1xl text-white'>{x?.email}</h2>
 
